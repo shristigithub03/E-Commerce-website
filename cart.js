@@ -1,142 +1,101 @@
 console.clear();
 
-if(document.cookie.indexOf(',counter=')>=0)
-{
-    let counter = document.cookie.split(',')[1].split('=')[1]
-    document.getElementById("badge").innerHTML = counter
+// Retrieve cart data from localStorage
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cartContainer = document.getElementById("cartContainer");
+let totalItem = document.getElementById("totalItem");
+let totalAmount = 0;
+
+// Update the total item count in the cart
+totalItem.innerText = `Total Items: ${cart.length}`;
+
+// Create the cart display container
+let boxContainerDiv = document.createElement("div");
+boxContainerDiv.id = "boxContainer";
+
+// Function to dynamically render cart items
+function dynamicCartSection(item, index) {
+    let boxDiv = document.createElement("div");
+    boxDiv.classList.add("cart-item");
+    
+    let boxImg = document.createElement("img");
+    boxImg.src = item.image;
+    boxImg.alt = item.name;
+    boxImg.style.width = "100px";
+    boxImg.style.height = "100px";
+    boxImg.style.borderRadius = "5px";
+
+    let boxh3 = document.createElement("h3");
+    boxh3.innerText = `${item.name} × 1`;
+
+    let boxh4 = document.createElement("h4");
+    boxh4.innerText = `Amount: Rs ${item.price}`;
+
+    let removeButton = document.createElement("button");
+    removeButton.innerText = "Remove";
+    removeButton.onclick = function () {
+        removeFromCart(index);
+    };
+
+    boxDiv.appendChild(boxImg);
+    boxDiv.appendChild(boxh3);
+    boxDiv.appendChild(boxh4);
+    boxDiv.appendChild(removeButton);
+
+    boxContainerDiv.appendChild(boxDiv);
 }
 
+// Function to update the total amount display
+function amountUpdate(amount) {
+    let totalContainerDiv = document.createElement("div");
+    totalContainerDiv.id = "totalContainer";
 
-let cartContainer = document.getElementById('cartContainer')
+    let totalDiv = document.createElement("div");
+    totalDiv.id = "total";
 
-let boxContainerDiv = document.createElement('div')
-boxContainerDiv.id = 'boxContainer'
+    let totalh2 = document.createElement("h2");
+    totalh2.innerText = "Total Amount";
 
-// DYNAMIC CODE TO SHOW THE SELECTED ITEMS IN YOUR CART
-function dynamicCartSection(ob,itemCounter)
-{
-    let boxDiv = document.createElement('div')
-    boxDiv.id = 'box'
-    boxContainerDiv.appendChild(boxDiv)
+    let totalh4 = document.createElement("h4");
+    totalh4.innerText = `Amount: Rs ${amount}`;
 
-    let boxImg = document.createElement('img')
-    boxImg.src = ob.preview
-    boxDiv.appendChild(boxImg)
+    let buttonDiv = document.createElement("div");
+    buttonDiv.id = "button";
 
-    let boxh3 = document.createElement('h3')
-    let h3Text = document.createTextNode(ob.name + ' × ' + itemCounter)
-    // let h3Text = document.createTextNode(ob.name)
-    boxh3.appendChild(h3Text)
-    boxDiv.appendChild(boxh3)
+    let buttonTag = document.createElement("button");
+    buttonTag.innerText = "Place Order";
+    buttonTag.onclick = function () {
+        placeOrder();
+    };
 
-    let boxh4 = document.createElement('h4')
-    let h4Text = document.createTextNode('Amount: Rs' + ob.price)
-    boxh4.appendChild(h4Text)
-    boxDiv.appendChild(boxh4)
-
-    // console.log(boxContainerDiv);
-
-    buttonLink.appendChild(buttonText)
-    cartContainer.appendChild(boxContainerDiv)
-    cartContainer.appendChild(totalContainerDiv)
-    // let cartMain = document.createElement('div')
-    // cartmain.id = 'cartMainContainer'
-    // cartMain.appendChild(totalContainerDiv)
-
-    return cartContainer
+    buttonDiv.appendChild(buttonTag);
+    totalDiv.appendChild(totalh2);
+    totalDiv.appendChild(totalh4);
+    totalDiv.appendChild(buttonDiv);
+    totalContainerDiv.appendChild(totalDiv);
+    cartContainer.appendChild(totalContainerDiv);
 }
 
-let totalContainerDiv = document.createElement('div')
-totalContainerDiv.id = 'totalContainer'
-
-let totalDiv = document.createElement('div')
-totalDiv.id = 'total'
-totalContainerDiv.appendChild(totalDiv)
-
-let totalh2 = document.createElement('h2')
-let h2Text = document.createTextNode('Total Amount')
-totalh2.appendChild(h2Text)
-totalDiv.appendChild(totalh2)
-
-// TO UPDATE THE TOTAL AMOUNT
-function amountUpdate(amount)
-{
-    let totalh4 = document.createElement('h4')
-    // let totalh4Text = document.createTextNode(amount)
-    let totalh4Text = document.createTextNode('Amount: Rs ' + amount)
-    totalh4Text.id = 'toth4'
-    totalh4.appendChild(totalh4Text)
-    totalDiv.appendChild(totalh4)
-    totalDiv.appendChild(buttonDiv)
-    console.log(totalh4);
+// Function to remove an item from the cart
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    location.reload();
 }
 
-
-let buttonDiv = document.createElement('div')
-buttonDiv.id = 'button'
-totalDiv.appendChild(buttonDiv)
-
-let buttonTag = document.createElement('button')
-buttonDiv.appendChild(buttonTag)
-
-let buttonLink = document.createElement('a')
-buttonLink.href = '/orderPlaced.html?'
-buttonTag.appendChild(buttonLink)
-
-buttonText = document.createTextNode('Place Order')
-buttonTag.onclick = function()
-{
-    console.log("clicked")
-}  
-//dynamicCartSection()
-// console.log(dynamicCartSection());
-
-// BACKEND CALL
-let httpRequest = new XMLHttpRequest()
-let totalAmount = 0
-httpRequest.onreadystatechange = function()
-{
-    if(this.readyState === 4)
-    {
-        if(this.status == 200)
-        {
-            // console.log('call successful');
-            contentTitle = JSON.parse(this.responseText)
-
-            let counter = Number(document.cookie.split(',')[1].split('=')[1])
-            document.getElementById("totalItem").innerHTML = ('Total Items: ' + counter)
-
-            let item = document.cookie.split(',')[0].split('=')[1].split(" ")
-            console.log(counter)
-            console.log(item)
-
-            let i;
-            let totalAmount = 0
-            for(i=0; i<counter; i++)
-            {
-                let itemCounter = 1
-                for(let j = i+1; j<counter; j++)
-                {   
-                    if(Number(item[j]) == Number(item[i]))
-                    {
-                        itemCounter +=1;
-                    }
-                }
-                totalAmount += Number(contentTitle[item[i]-1].price) * itemCounter
-                dynamicCartSection(contentTitle[item[i]-1],itemCounter)
-                i += (itemCounter-1)
-            }
-            amountUpdate(totalAmount)
-        }
-    }
-        else
-        {
-            console.log('call failed!');
-        }
+// Function to handle order placement
+function placeOrder() {
+    alert("Order Placed Successfully!");
+    localStorage.removeItem("cart");
+    location.href = "/orderPlaced.html";
 }
 
-httpRequest.open('GET', 'https://5d76bf96515d1a0014085cf9.mockapi.io/product', true)
-httpRequest.send()
+// Load and display cart items
+cartContainer.appendChild(boxContainerDiv);
+cart.forEach((item, index) => {
+    dynamicCartSection(item, index);
+    totalAmount += item.price;
+});
 
-
-
+// Update the total amount
+amountUpdate(totalAmount);
