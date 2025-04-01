@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HEADER | E-COMMERCE WEBSITE</title>
+    <!-- Favicon -->
+    <link rel="icon" href="https://yt3.ggpht.com/a/AGF-l78km1YyNXmF0r3-0CycCA0HLA_i6zYn_8NZEg=s900-c-k-c0xffffffff-no-rj-mo" type="image/gif" sizes="16x16">
+    <!-- External Links -->
+    <link rel="stylesheet" href="css/header.css">
+    <script src="https://kit.fontawesome.com/4a3b1f73a2.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Lato', sans-serif;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #222;
+            padding: 15px 0;
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        #container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        #shopName a {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffcc00;
+            text-decoration: none;
+        }
+        #collection div a {
+            margin: 0 15px;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        #collection div a:hover {
+            color: #ffcc00;
+        }
+        #search {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 25px;
+            padding: 5px 10px;
+        }
+        #search input {
+            border: none;
+            outline: none;
+            padding: 8px;
+            border-radius: 20px;
+            font-size: 16px;
+        }
+        #search i {
+            color: #222;
+            margin-right: 8px;
+        }
+        #user a {
+            color: white;
+            margin-left: 15px;
+            font-size: 22px;
+            transition: 0.3s;
+        }
+        #user a:hover {
+            color: #ffcc00;
+        }
+        #badge {
+            background: red;
+            color: white;
+            font-size: 12px;
+            border-radius: 50%;
+            padding: 3px 6px;
+            position: absolute;
+            top: 10px;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="container">
+            <!-- Shop Name -->
+            <div id="shopName"><a href="index.html">SHOP LANE</a></div>
+            <!-- Collections -->
+            <div id="collection">
+                <div><a href="clothing.html">CLOTHING</a></div>
+                <div><a href="accessories.html">ACCESSORIES</a></div>
+            </div>
+            <!-- Search Section -->
+            <div id="search">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search for Clothing and Accessories">
+            </div>
+            <!-- User Section -->
+            <div id="user">
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i><span id="badge">0</span></a>
+                <a href="profile.html"><i class="fas fa-user-circle"></i></a>
+            </div>
+        </div>
+    </header>
+</body>
+</html>
